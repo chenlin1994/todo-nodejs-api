@@ -1,0 +1,27 @@
+-- 创建数据库
+CREATE DATABASE `my_test` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+-- 创建用户表
+CREATE TABLE `sys_user` (
+    `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '唯一标识',
+    `username` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '登录帐号，邮箱或手机号',
+    `password` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '登录密码',
+    `nickname` VARCHAR(50) NULL DEFAULT '' COMMENT '昵称',
+    `avator` VARCHAR(50) NULL DEFAULT '' COMMENT '用户头像',
+   `sex` VARCHAR(20) NULL DEFAULT '' COMMENT '性别：u:未知,  m:男,  w:女',
+   `gmt_create` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `gmt_modify` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`) USING BTREE,
+   UNIQUE KEY `username_UNIQUE` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='用户表';
+
+-- 创建任务
+CREATE TABLE `sys_task` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '唯一标识',
+  `title`  VARCHAR(50) NOT NULL DEFAULT '' COMMENT '任务名称',
+  `content` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '任务内容',
+  `content` VARCHAR(2) NOT NULL DEFAULT  '0' COMMENT '任务状态',
+  `is_major` VARCHAR(50) NOT NULL DEFAULT '0' COMMENT '是否重要 0-不重要 1-重要'
+  `gmt_create` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '任务创建时间',
+  `gmt_expire` BIGINT(255) NOT NULL 0 COMMENT '任务过期时间'
+)
