@@ -29,7 +29,7 @@ function login(req, res, next) {
   } else {
     let { username, password } = req.body
     // md5加密
-    password = md5(password)
+    let password_md5 = md5(password)
     const query = `select * from sys_user where username='${username}' and password='${password}'`
     querySql(query).then((user) => {
       // console.log('用户登录===', user);
