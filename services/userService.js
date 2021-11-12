@@ -181,7 +181,76 @@ function resetPwd(req, res, next) {
     })
   }
 }
-
+// 查询用户列表
+function getUserList(req, res, next) {
+  const err = validationResult(req)
+  // 如果验证错误，empty不为空
+  if (!err.isEmpty()) {
+    // 获取错误信息
+    const [{ msg }] = err.errors
+    // 抛出错误，交给我们自定义的统一异常处理程序进行错误返回
+    next(boom.badRequest(msg))
+  } else {
+    let { pageSize = 10, pageNo = 1 } = req.query
+    let query = `select d.id,d.username,d.password,d.gmt_create from sys_user d`
+    querySql(query).then((data) => {
+      if (!data || data.length === 0) {
+        res.json({
+          code: -1,
+          msg: '暂无数据',
+          data: null,
+        })
+      } else {
+        total = data.length
+        let n = (pageNo - 1) * pageSize
+        let querySecond =
+          query + ` order by d.gmt_create desc limit ${n}, ${pageSize}`
+        querySql(querySecond).then((result) => {
+          console.log(result)
+          res.json({
+            code: 0,
+            msg: '查询数据成功',
+            data: {
+              rows: result,
+              total: total,
+              pageNo: parseInt(pageNo),
+              pageSize: parseInt(pageSize),
+            },
+          })
+        })
+      }
+    })
+  }
+}
+// 删除用户
+function deleteUser(req, res, next) {
+  const err = validationResult(req)
+  if (!err.isEmpty) {
+    const [{ msg }] = err.errors
+    next(boom.badRequest(msg))
+  } else {
+    let { id } = req.params
+    let query = `select * from sys_user where id=${id}`
+    querySql(query).then((user) => {
+      if (!user || user.length === 0) {
+        res.json({
+          code: -1,
+          msg: '用户不存在',
+          data: null,
+        })
+      } else {
+        let query = `delete from sys_user where id=${id}`
+        querySql(query).then((user) => {
+          res.json({
+            code: 0,
+            msg: '删除成功',
+            data: user,
+          })
+        })
+      }
+    })
+  }
+}
 // 校验用户名和密码
 function validateUser(username, oldPassword) {
   const query = `select id, username from sys_user where username='${username}' and password='${oldPassword}'`
@@ -198,4 +267,6 @@ module.exports = {
   login,
   register,
   resetPwd,
+  deleteUser,
+  getUserList,
 }

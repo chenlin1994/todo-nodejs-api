@@ -28,7 +28,8 @@ const jwtAuth = expressJwt({
     '/',
     '/api/login',
     '/api/register',
-    '/api/resetPwd'
+    '/api/resetPwd',
+    '/api/user/list'
   ]
 })
 
