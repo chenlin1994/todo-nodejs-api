@@ -29,8 +29,6 @@ async function getKey(callback, params) {
     url: `${baseURL}/api/poros-authcenter/secret/${username}`,
     params: {},
   })
-  console.log('======getKey=======')
-  console.log(data)
   return login(data.data, callback, params)
 }
 async function login(name, callback, params) {
@@ -69,8 +67,6 @@ async function getMemberInfo(params = {}) {
       },
       method: 'get',
     })
-    console.log('====request===')
-    console.log(data)
     if (data.code == 401) {
       return getKey(getMemberInfo, params)
     } else {
@@ -93,4 +89,10 @@ let encryptByDES = (str, key) => {
 // getMemberInfo().then((data) => {
 //   console.log(data || { code: -1 })
 // })
-module.exports = getMemberInfo
+function secStaffList(req, res, next) {
+  getMemberInfo({ url: '/poros-permission/secStaff/list' }).then((data) => {
+    res.json(data)
+  })
+}
+module.exports.secStaffList = secStaffList
+module.exports.getRequest = getMemberInfo

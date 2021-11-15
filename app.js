@@ -9,18 +9,19 @@ const express = require('express') // 引入express模块
 const cors = require('cors') // 引入cors模块
 const routes = require('./routes') //导入自定义路由文件，创建模块化路由
 const app = express()
-const getRequest = require('./services/requestService')
+const requestService = require('./services/requestService')
 app.use(bodyParser.json()) // 解析json数据格式
 app.use(bodyParser.urlencoded({ extended: true })) // 解析form表单提交的数据application/x-www-form-urlencoded
 
 app.use(cors()) // 注入cors模块解决跨域
 
 app.use('/', routes)
-app.get('/api/poros-permission/secStaff/list', function (req, res) {
-  getRequest({ url: '/poros-permission/secStaff/list' }).then((data) => {
-    res.send(data)
-  })
-})
+
+// app.get('/api/poros-permission/secStaff/list', function (req, res) {
+//   requestService.getRequest({ url: '/poros-permission/secStaff/list' }).then((data) => {
+//     res.send(data)
+//   })
+// })
 
 app.listen(8088, () => {
   // 监听8088端口
