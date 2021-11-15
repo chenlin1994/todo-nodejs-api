@@ -65,7 +65,7 @@ async function getMemberInfo(params = {}) {
         Cookie: `${dev}access_token=${accessToken}; ${dev}token_type=${tokenType}`,
         Authorization: `${tokenType} ${accessToken}`,
       },
-      method: 'get',
+      method: params.method || 'get',
     })
     if (data.code == 401) {
       return getKey(getMemberInfo, params)
